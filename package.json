@@ -1,0 +1,31 @@
+{
+  "name": "challengex",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ChallengeX — gamified idea-validation and innovation platform. Root orchestration only; all application code lives in frontend/, admin/ and backend/.",
+  "scripts": {
+    "dev": "concurrently -n backend,frontend,admin -c green,blue,magenta \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\" \"npm run dev --prefix admin\"",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:admin": "npm run dev --prefix admin",
+    "dev:backend": "npm run dev --prefix backend",
+    "build": "npm run build:frontend && npm run build:admin && npm run build:backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build:admin": "npm run build --prefix admin",
+    "build:backend": "npm run build --prefix backend",
+    "start": "npm run start --prefix backend",
+    "lint": "npm run lint --prefix frontend && npm run lint --prefix admin && npm run lint --prefix backend",
+    "test": "npm run test --prefix frontend && npm run test --prefix admin && npm run test --prefix backend",
+    "install:all": "npm install && npm install --prefix frontend && npm install --prefix admin && npm install --prefix backend",
+    "prisma:generate": "npm run prisma:generate --prefix backend",
+    "prisma:migrate": "npm run prisma:migrate --prefix backend",
+    "prisma:seed": "npm run prisma:seed --prefix backend",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

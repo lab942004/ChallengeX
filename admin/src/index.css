@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-ink-950 text-sand font-sans antialiased;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: rgba(229, 22, 28, 0.4);
+    color: #f5e7d6;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #070707;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #260305;
+    border-radius: 6px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #65080d;
+  }
+
+  :focus-visible {
+    outline: 2px solid #e5161c;
+    outline-offset: 1px;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-xl border border-white/5 bg-ink-850 shadow-panel;
+  }
+
+  .admin-title {
+    @apply font-display font-semibold tracking-[0.08em] uppercase;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-xs
+      font-semibold tracking-wide transition-colors disabled:cursor-not-allowed
+      disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-brand-800 text-sand-light hover:bg-brand-600;
+  }
+
+  .btn-ghost {
+    @apply btn border border-white/10 bg-ink-800 text-sand-dim hover:border-brand-800 hover:text-sand;
+  }
+
+  .btn-danger {
+    @apply btn border border-brand-800/60 bg-brand-950/60 text-brand-400 hover:bg-brand-800/40;
+  }
+
+  .admin-input {
+    @apply w-full rounded-lg border border-white/10 bg-ink-800 px-3.5 py-2.5 text-sm
+      text-sand placeholder:text-sand-dim/50 focus:border-brand-800 focus:outline-none
+      focus:ring-1 focus:ring-brand-800;
+  }
+
+  .admin-label {
+    @apply mb-1.5 block text-[11px] font-semibold uppercase tracking-[0.14em] text-sand-dim;
+  }
+
+  .th {
+    @apply px-4 py-3 text-left text-[10px] font-bold uppercase tracking-[0.16em] text-sand-dim;
+  }
+
+  .td {
+    @apply px-4 py-3 text-sm text-sand/90;
+  }
+}

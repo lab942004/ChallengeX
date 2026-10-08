@@ -1,0 +1,57 @@
+# Dependencies and package-manager caches
+node_modules/
+.pnp/
+.pnp.*
+.npm/
+.yarn/*
+!.yarn/patches/
+!.yarn/plugins/
+!.yarn/releases/
+!.yarn/versions/
+pnpm-store/
+
+# Build output and tooling caches
+dist/
+build/
+.vite/
+.turbo/
+*.tsbuildinfo
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+.envrc
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+yarn-debug.log*
+
+# Test and coverage output
+coverage/
+test-results/
+playwright-report/
+blob-report/
+.nyc_output/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.history/
+.vscode/*
+!.vscode/extensions.json
+
+# Prisma (generated only; schema and migrations are committed)
+backend/prisma/generated/
+
+# Local scratch files
+_envcheck.txt
+*.swp
+*.swo
+*.stackdump

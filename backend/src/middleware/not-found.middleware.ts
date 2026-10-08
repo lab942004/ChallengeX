@@ -1,0 +1,12 @@
+import { NextFunction, Request, Response } from 'express';
+
+/** 404 fallback for unknown API routes. */
+export function notFoundHandler(req: Request, res: Response, _next: NextFunction) {
+  res.status(404).json({
+    success: false,
+    error: {
+      code: 'NOT_FOUND',
+      message: `Route ${req.method} ${req.originalUrl} does not exist.`,
+    },
+  });
+}

@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-void text-parchment font-sans antialiased;
+    background-image: url('/assets/all-pages-background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-blend-mode: soft-light;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background: rgba(229, 22, 28, 0.45);
+    color: #f5e7d6;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #070707;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#65080d, #260305);
+    border-radius: 6px;
+    border: 2px solid #070707;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(#e5161c, #65080d);
+  }
+
+  :focus-visible {
+    outline: 2px solid #ff2424;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Cinematic page shell used across app pages. */
+  .realm-surface {
+    @apply relative overflow-hidden bg-abyss/85 backdrop-blur-sm border border-blood-950;
+  }
+
+  .card-realm {
+    @apply realm-surface rounded-xl shadow-insetRune;
+  }
+
+  .title-cinzel {
+    @apply font-cinzel tracking-[0.14em] uppercase;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-blood-800 px-6 py-3
+      font-cinzel text-sm font-bold uppercase tracking-[0.18em] text-parchment-light
+      transition-all duration-300 hover:bg-blood-600 hover:shadow-red-glow
+      disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-blood-950
+      bg-obsidian/60 px-6 py-3 font-cinzel text-sm font-bold uppercase tracking-[0.18em]
+      text-parchment-dim transition-all duration-300 hover:border-blood-800
+      hover:text-parchment disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .field-input {
+    @apply w-full rounded-lg border border-blood-950 bg-obsidian/80 px-4 py-3 text-sm
+      text-parchment placeholder:text-parchment-dim/60 transition-colors
+      focus:border-blood-800 focus:outline-none focus:ring-1 focus:ring-blood-800;
+  }
+
+  .label-caps {
+    @apply mb-2 block font-sans text-[11px] font-semibold uppercase tracking-[0.2em]
+      text-parchment-dim;
+  }
+}
+
+@layer utilities {
+  .text-gradient-blood {
+    @apply bg-gradient-to-r from-blood-600 via-blood-500 to-blood-400 bg-clip-text
+      text-transparent;
+  }
+
+  .vignette::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(3, 3, 3, 0.85) 100%);
+  }
+}
+
+/* Respect reduced motion globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

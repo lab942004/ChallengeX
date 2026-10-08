@@ -1,0 +1,401 @@
+// ChallengeX Prisma schema — exists ONLY in backend/prisma/.
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────── Enums ───────────────────────────
+
+enum Role {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum IdeaStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+  DELETED
+}
+
+enum TrialMode {
+  STRESS_TEST
+  BRUTAL_MODE
+  X100_MODE
+  COMPETITOR_MODE
+  FAILURE_MODE
+}
+
+enum TrialStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+enum Verdict {
+  BUILD
+  PIVOT
+  VALIDATE
+  KILL
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum RoadmapStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum StepStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ExperimentStatus {
+  DRAFT
+  PLANNED
+  RUNNING
+  COMPLETED
+  CANCELLED
+}
+
+enum NotificationType {
+  TRIAL_COMPLETED
+  VERDICT_GENERATED
+  ROADMAP_COMPLETED
+  EXPERIMENT_CREATED
+  SAVED_IDEA
+  SYSTEM
+}
+
+// ─────────────────────────── Core models ───────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  username     String   @unique
+  email        String   @unique
+  passwordHash String
+  avatar       String?
+  role         Role     @default(USER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ideas               Idea[]
+  trials              Trial[]
+  savedIdeas          SavedIdea[]
+  notifications       Notification[]
+  passwordResetTokens PasswordResetToken[]
+
+  @@index([role])
+}
+
+model Idea {
+  id          String     @id @default(cuid())
+  userId      String
+  title       String
+  description String
+  status      IdeaStatus @default(ACTIVE)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trials  Trial[]
+  savedBy SavedIdea[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Trial {
+  id              String      @id @default(cuid())
+  userId          String
+  ideaId          String
+  mode            TrialMode
+  status          TrialStatus @default(ACTIVE)
+  currentQuestion Int         @default(1)
+  score           Int?
+  verdict         Verdict?
+  // Full backend-computed analysis snapshot (score breakdown, summary,
+  // alternative directions). Frontend/admin never compute these.
+  analysis        Json?
+  createdAt       DateTime    @default(now())
+  completedAt     DateTime?
+
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea           Idea             @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+  questions      TrialQuestion[]
+  answers        TrialAnswer[]
+  assumptions    Assumption[]
+  risks          Risk[]
+  recommendations Recommendation[]
+  experiments    Experiment[]
+  roadmap        Roadmap?
+
+  @@index([userId])
+  @@index([ideaId])
+  @@index([status])
+  @@index([verdict])
+  @@index([createdAt])
+}
+
+model TrialQuestion {
+  id          String    @id @default(cuid())
+  trialId     String
+  category    String
+  question    String
+  order       Int
+  riskLevel   RiskLevel @default(MEDIUM)
+  explanation String?
+
+  trial   Trial         @relation(fields: [trialId], references: [id], onDelete: Cascade)
+  answers TrialAnswer[]
+
+  @@unique([trialId, order])
+  @@index([trialId])
+}
+
+model TrialAnswer {
+  id         String   @id @default(cuid())
+  trialId    String
+  questionId String
+  answer     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  trial    Trial         @relation(fields: [trialId], references: [id], onDelete: Cascade)
+  question TrialQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@unique([trialId, questionId])
+  @@index([trialId])
+}
+
+model Assumption {
+  id               String @id @default(cuid())
+  trialId          String
+  title            String
+  description      String
+  risk             String
+  evidence         String
+  validationMethod String
+
+  trial Trial @relation(fields: [trialId], references: [id], onDelete: Cascade)
+
+  @@index([trialId])
+}
+
+model Risk {
+  id          String   @id @default(cuid())
+  trialId     String
+  title       String
+  description String
+  severity    Severity
+  evidence    String
+
+  trial Trial @relation(fields: [trialId], references: [id], onDelete: Cascade)
+
+  @@index([trialId])
+}
+
+model Recommendation {
+  id          String   @id @default(cuid())
+  trialId     String
+  title       String
+  description String
+  priority    Priority
+
+  trial Trial @relation(fields: [trialId], references: [id], onDelete: Cascade)
+
+  @@index([trialId])
+}
+
+model Experiment {
+  id            String           @id @default(cuid())
+  trialId       String
+  title         String
+  description   String
+  steps         Json
+  successMetric String
+  estimatedCost String
+  duration      String
+  status        ExperimentStatus @default(PLANNED)
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  trial Trial @relation(fields: [trialId], references: [id], onDelete: Cascade)
+
+  @@index([trialId])
+  @@index([status])
+}
+
+model Roadmap {
+  id        String        @id @default(cuid())
+  trialId   String        @unique
+  title     String
+  status    RoadmapStatus @default(PENDING)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  trial Trial         @relation(fields: [trialId], references: [id], onDelete: Cascade)
+  steps RoadmapStep[]
+
+  @@index([status])
+}
+
+model RoadmapStep {
+  id              String     @id @default(cuid())
+  roadmapId       String
+  title           String
+  description     String
+  order           Int
+  status          StepStatus @default(PENDING)
+  objective       String?
+  tasks           Json?
+  deliverables    Json?
+  estimatedEffort String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@unique([roadmapId, order])
+  @@index([roadmapId])
+}
+
+model SavedIdea {
+  id        String   @id @default(cuid())
+  userId    String
+  ideaId    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  idea Idea @relation(fields: [ideaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, ideaId])
+  @@index([userId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType @default(SYSTEM)
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([createdAt])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ─────────────────────────── Challenge content (admin-managed) ───────────────────────────
+
+model ChallengeCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  order       Int      @default(0)
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  questions ChallengeQuestion[]
+}
+
+model ChallengeQuestion {
+  id          String    @id @default(cuid())
+  categoryId  String
+  question    String
+  riskLevel   RiskLevel @default(MEDIUM)
+  explanation String?
+  order       Int       @default(0)
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  category ChallengeCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@index([categoryId, active])
+}
+
+// ─────────────────────────── Admin-managed configuration ───────────────────────────
+
+model RiskRule {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String
+  category    String?
+  severity    Severity  @default(MEDIUM)
+  threshold   Int?
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model RoadmapTemplate {
+  id              String   @id @default(cuid())
+  name            String
+  description     String?
+  order           Int      @default(0)
+  objective       String
+  tasks           Json
+  deliverables    Json
+  estimatedEffort String   @default("1 week")
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([order])
+}
+
+model SystemSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
