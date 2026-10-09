@@ -72,10 +72,16 @@
 }
 
 @layer components {
-  /* Cinematic page shell used across app pages. */
+  /* Cinematic page shell used across app pages.
+     Translucent surface so the castle atmosphere reads *around and subtly
+     through* cards — RGBA is used instead of `opacity` so text, icons and
+     borders inside the card stay fully opaque. */
   .realm-surface {
-    @apply relative overflow-hidden bg-abyss/85 backdrop-blur-sm border border-blood-950;
-    border-color: var(--border-subtle);
+    @apply relative overflow-hidden border border-blood-950;
+    background: rgba(16, 9, 9, 0.84);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-color: rgba(229, 9, 32, 0.28);
   }
 
   .card-realm {
@@ -124,7 +130,9 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(ellipse at center, transparent 40%, rgba(3, 3, 3, 0.85) 100%);
+    /* Soft cinematic framing (0.55, was 0.85) — darkens the extreme edges
+       for depth without crushing the artwork into black corners. */
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(3, 3, 3, 0.55) 100%);
   }
 }
 

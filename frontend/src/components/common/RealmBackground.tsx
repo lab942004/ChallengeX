@@ -6,14 +6,18 @@ import { cn } from '../../utils';
  * RealmBackground — the canonical layered background composition:
  *
  *   1. Base near-black foundation (--background).
- *   2. Full-page dark-fantasy artwork (all-pages-background.png).
+ *   2. Full-page dark-fantasy artwork (all-pages-background.png) — rendered
+ *      near full opacity with a slight brightness/saturation trim so the
+ *      castle, crimson lighting and fog stay clearly visible (never buried
+ *      under stacked black scrims).
  *   3. Optional gate artwork (entry-gate.webp for the gate variant).
  *      NOTE: gate-left.webp / gate-right.webp are not present in this
  *      repository, so they are never referenced — the entry-gate artwork
  *      already carries the left/right gate composition (it is split into
  *      two doors by GatePage). Referencing missing files would produce
  *      broken image requests, so the composition degrades gracefully.
- *   4. Readability overlay (restrained dark gradient).
+ *   4. Readability overlay — a *restrained* gradient (rgba(7,6,6, 0.12–0.35))
+ *      that keeps foreground text legible without hiding the artwork.
  *   5. Atmospheric effects (fog + vignette), disabled under reduced motion.
  *
  * Every layer is decorative: aria-hidden, pointer-events: none, and all
@@ -58,8 +62,19 @@ interface RealmBackgroundProps {
   className?: string;
 }
 
-const ART: Record<RealmVariant, { src: string; opacity: number; position: string }> = {
-  app: { src: '/assets/all-pages-background.png', opacity: 0.5, position: 'center top' },
+const ART: Record<
+  RealmVariant,
+  { src: string; opacity: number; position: string; filter?: string }
+> = {
+  // The castle artwork is already dark and cinematic by nature — show it at
+  // full strength. The slight darkening + saturation lift keeps crimson
+  // highlights from washing out once the readability scrims are reduced.
+  app: {
+    src: '/assets/all-pages-background.png',
+    opacity: 1,
+    position: 'center top',
+    filter: 'brightness(0.85) saturate(1.15)',
+  },
   gate: { src: '/assets/entry-gate.webp', opacity: 1, position: 'center' },
   auth: { src: '/assets/auth-background.png', opacity: 1, position: 'center' },
 };
@@ -82,14 +97,22 @@ export function RealmBackground({
       {/* 1–2. Base + full-page artwork */}
       <ArtLayer
         src={art.src}
-        style={{ opacity, objectPosition: art.position }}
+        style={{ opacity, objectPosition: art.position, filter: art.filter }}
         className={variant === 'gate' ? 'scale-105' : undefined}
       />
 
-      {/* 4. Readability overlay — keeps artwork visible while text stays legible */}
+      {/* 4. Readability overlay — restrained so the artwork stays visible
+          while text remains legible. Values are intentionally low-alpha:
+          never stack solid black over the castle. */}
       {variant === 'app' && (
         <>
-          <div className="absolute inset-0 bg-gradient-to-b from-void/70 via-void/55 to-void/85" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                'linear-gradient(180deg, rgba(7, 6, 6, 0.12) 0%, rgba(7, 6, 6, 0.22) 55%, rgba(7, 6, 6, 0.35) 100%)',
+            }}
+          />
           <div
             className="absolute inset-0"
             style={{
@@ -101,8 +124,8 @@ export function RealmBackground({
       )}
       {variant === 'gate' && (
         <>
-          <div className="absolute inset-0 bg-void/45" />
-          <div className="absolute inset-0 bg-gradient-to-b from-void/60 via-transparent to-void/85" />
+          <div className="absolute inset-0 bg-void/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-void/40 via-transparent to-void/70" />
         </>
       )}
       {variant === 'auth' && (
@@ -112,12 +135,14 @@ export function RealmBackground({
         </>
       )}
 
-      {/* 5. Atmospheric fog (respecting reduced motion via global CSS rules) */}
+      {/* 5. Atmospheric fog (respecting reduced motion via global CSS rules).
+          Kept light so the lower artwork (ritual circle, braziers, fog banks
+          painted into the asset) still reads through. */}
       {!reducedMotion && (
         <>
-          <div className="absolute inset-x-[-8%] bottom-0 h-1/4 bg-gradient-to-t from-abyss/70 via-abyss/30 to-transparent blur-2xl animate-fog-drift" />
+          <div className="absolute inset-x-[-8%] bottom-0 h-1/4 bg-gradient-to-t from-abyss/45 via-abyss/18 to-transparent blur-2xl animate-fog-drift" />
           <div
-            className="absolute inset-x-[-8%] bottom-0 h-1/5 bg-gradient-to-t from-blood-950/50 to-transparent blur-3xl animate-fog-drift opacity-60"
+            className="absolute inset-x-[-8%] bottom-0 h-1/5 bg-gradient-to-t from-blood-950/40 to-transparent blur-3xl animate-fog-drift opacity-40"
             style={{ animationDelay: '7s' }}
           />
         </>

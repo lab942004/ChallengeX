@@ -30,8 +30,10 @@ export function LandingPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Layered gate artwork — clear central focal point behind the hero */}
-      <RealmBackground variant="gate" artOpacity={0.85} vignette={false} />
+      {/* Layered gate artwork — clear central focal point behind the hero.
+          No extra artOpacity dimming: RealmBackground's own restrained
+          scrims keep the gate, banners and blood moon clearly visible. */}
+      <RealmBackground variant="gate" vignette={false} />
       <div className="vignette pointer-events-none absolute inset-0" aria-hidden />
 
       {/* Header */}
