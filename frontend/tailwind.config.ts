@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         /* Aligned to the CHALLENGEX :root design tokens (index.css). */
         void: '#070606' /* --background */,
+        sidebar: '#0c0808' /* --sidebar-surface */,
         abyss: '#100909' /* --surface */,
         obsidian: '#170909' /* --surface-elevated */,
         surface: {

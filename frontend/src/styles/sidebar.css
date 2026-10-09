@@ -1,0 +1,173 @@
+/**
+ * ChallengeX — sidebar layout shell (authenticated application).
+ * Structural styles only: dimensions, positioning, transitions and the
+ * mobile drawer. Colors come from the shared design tokens in
+ * tailwind.config.ts (#070606 / #0c0808 / crimson / parchment).
+ */
+
+.cx-app {
+  --cx-sidebar-w: 250px;
+}
+
+.cx-app--collapsed {
+  --cx-sidebar-w: 76px;
+}
+
+/* ── Desktop sidebar (≥1024px) ──────────────────────────────────── */
+
+.cx-sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  display: none; /* replaced by the drawer below lg */
+  flex-direction: column;
+  width: var(--cx-sidebar-w);
+  border-right: 1px solid rgba(229, 9, 32, 0.2);
+  /* Sidebar surface #0c0808 — slightly translucent so a hint of the
+     gothic atmosphere stays visible while navigation remains legible. */
+  background: #0c0808;
+  background: rgba(12, 8, 8, 0.96);
+  box-shadow: 14px 0 34px rgba(0, 0, 0, 0.45);
+  transition: width 0.25s ease;
+}
+
+.cx-app-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-width: 0;
+  transition: margin-left 0.25s ease;
+}
+
+@media (min-width: 1024px) {
+  .cx-sidebar {
+    display: flex;
+  }
+
+  .cx-app-content {
+    margin-left: var(--cx-sidebar-w);
+  }
+}
+
+/* ── Active-route indicator ─────────────────────────────────────── */
+
+.cx-sidebar-item-indicator {
+  position: absolute;
+  top: 22%;
+  bottom: 22%;
+  left: -8px;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: linear-gradient(180deg, #ff2638, #e50920);
+  box-shadow: 0 0 10px rgba(229, 9, 32, 0.6);
+}
+
+/* ── Unread badge ───────────────────────────────────────────────── */
+
+.cx-nav-badge {
+  display: grid;
+  place-items: center;
+  min-width: 1.125rem;
+  height: 1.125rem;
+  padding: 0 0.25rem;
+  border-radius: 9999px;
+  background: #760b12;
+  color: #f4ead9;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── Hamburger (mobile header) ──────────────────────────────────── */
+
+.cx-hamburger {
+  display: grid;
+  place-items: center;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 0.5rem;
+  color: #a79a8b;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.cx-hamburger:hover {
+  color: #e9dfd0;
+  background-color: #210a0d;
+}
+
+@media (min-width: 1024px) {
+  .cx-hamburger {
+    display: none;
+  }
+}
+
+/* ── Mobile drawer (<1024px) ────────────────────────────────────── */
+
+.cx-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(7, 6, 6, 0.72);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.cx-drawer-panel {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  width: min(296px, 85vw);
+  border-right: 1px solid rgba(229, 9, 32, 0.25);
+  background: #0c0808;
+  background: rgba(12, 8, 8, 0.98);
+  box-shadow: 24px 0 60px rgba(0, 0, 0, 0.6);
+  visibility: hidden;
+  transform: translateX(-100%);
+  transition:
+    transform 0.28s ease,
+    visibility 0s linear 0.28s;
+}
+
+.cx-drawer--open .cx-drawer-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cx-drawer--open .cx-drawer-panel {
+  visibility: visible;
+  transform: translateX(0);
+  transition:
+    transform 0.28s ease,
+    visibility 0s;
+}
+
+.cx-drawer-close {
+  position: absolute;
+  top: 1.1rem;
+  right: 0.75rem;
+  z-index: 10;
+  display: grid;
+  place-items: center;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 0.5rem;
+  color: #a79a8b;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.cx-drawer-close:hover {
+  color: #e9dfd0;
+  background-color: #210a0d;
+}

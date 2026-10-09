@@ -112,9 +112,9 @@ export function DashboardPage() {
         <StatCard label="Average Score" value={stats.averageScore} Icon={Gavel} />
       </div>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
         {/* Continue trial */}
-        <section className="card-realm p-5 lg:col-span-2">
+        <section className="card-realm min-w-0 p-5">
           <h2 className="title-cinzel mb-4 text-sm text-parchment-light">Continue Trial</h2>
           {stats.activeTrial ? (
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -160,7 +160,7 @@ export function DashboardPage() {
         </section>
 
         {/* Collections */}
-        <section className="card-realm p-5">
+        <section className="card-realm min-w-0 p-5">
           <h2 className="title-cinzel mb-4 text-sm text-parchment-light">Collections</h2>
           <ul className="space-y-2 text-sm">
             <li>
