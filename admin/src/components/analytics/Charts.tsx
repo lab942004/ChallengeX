@@ -15,16 +15,16 @@ import {
 } from 'recharts';
 
 const VERDICT_COLORS: Record<string, string> = {
-  BUILD: '#10b981',
-  VALIDATE: '#f59e0b',
-  PIVOT: '#0ea5e9',
-  KILL: '#E5161C',
+  BUILD: '#C9B896',
+  VALIDATE: '#e50920',
+  PIVOT: '#A89588',
+  KILL: '#5c060d',
 };
 
 const axisStyle = { fill: '#A89588', fontSize: 11 };
 const tooltipStyle = {
   background: '#0b0b0b',
-  border: '1px solid #65080D',
+  border: '1px solid #760b12',
   borderRadius: 8,
   color: '#E8D5BD',
   fontSize: 12,
@@ -39,7 +39,7 @@ export function VerdictPie({ data }: { data: { verdict: string; count: number }[
         <PieChart>
           <Pie data={data} dataKey="count" nameKey="verdict" innerRadius={55} outerRadius={90}>
             {data.map((entry) => (
-              <Cell key={entry.verdict} fill={VERDICT_COLORS[entry.verdict] ?? '#65080D'} />
+              <Cell key={entry.verdict} fill={VERDICT_COLORS[entry.verdict] ?? '#760b12'} />
             ))}
           </Pie>
           <Tooltip contentStyle={tooltipStyle} />
@@ -61,7 +61,7 @@ export function SignupsLine({ data }: { data: { date: string; count: number }[] 
           <XAxis dataKey="date" tick={axisStyle} tickFormatter={(v: string) => v.slice(5)} />
           <YAxis tick={axisStyle} allowDecimals={false} width={30} />
           <Tooltip contentStyle={tooltipStyle} />
-          <Line type="monotone" dataKey="count" stroke="#E5161C" strokeWidth={2} dot={{ r: 2 }} />
+          <Line type="monotone" dataKey="count" stroke="#e50920" strokeWidth={2} dot={{ r: 2 }} />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -79,7 +79,7 @@ export function ModesBar({ data }: { data: { mode: string; count: number }[] }) 
           <XAxis dataKey="mode" tick={axisStyle} tickFormatter={(v: string) => v.replace('_MODE', '').replace('_', ' ')} />
           <YAxis tick={axisStyle} allowDecimals={false} width={30} />
           <Tooltip contentStyle={tooltipStyle} />
-          <Bar dataKey="count" fill="#65080D" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="count" fill="#760b12" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </div>

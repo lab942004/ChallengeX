@@ -12,6 +12,7 @@ import {
 import { ROUTES } from '../constants';
 import { useAuth } from '../context/AuthContext';
 import { useNotifications } from '../context/NotificationContext';
+import { RealmBackground } from '../components/common/RealmBackground';
 import { cn } from '../utils';
 
 const NAV_ITEMS = [
@@ -25,8 +26,9 @@ const NAV_ITEMS = [
 const HISTORY_LIKE = new Set<string>([ROUTES.history, ROUTES.notifications]);
 
 /**
- * AppLayout — desktop top navigation + mobile bottom navigation
- * (touch-friendly, single-column, no horizontal scrolling).
+ * AppLayout — slim near-black top navigation (desktop) + compact
+ * touch-friendly bottom navigation (mobile), layered over the
+ * RealmBackground atmospheric artwork.
  */
 export function AppLayout() {
   const { user, logout } = useAuth();
@@ -41,11 +43,17 @@ export function AppLayout() {
         : location.pathname.startsWith(to);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="relative flex min-h-screen flex-col">
+      {/* Layered atmospheric background (decorative only) */}
+      <RealmBackground variant="app" />
+
       {/* Desktop header */}
-      <header className="sticky top-0 z-40 border-b border-blood-950 bg-abyss/90 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-blood-950 bg-abyss/92 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
-          <Link to={ROUTES.gate} className="font-display text-lg tracking-[0.24em] text-parchment-light">
+          <Link
+            to={ROUTES.gate}
+            className="font-display text-lg tracking-[0.24em] text-parchment-light transition-colors hover:text-blood-500"
+          >
             CHALLENGEX
           </Link>
 
@@ -55,10 +63,10 @@ export function AppLayout() {
                 key={to}
                 to={to}
                 className={cn(
-                  'flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition-colors',
+                  'flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] transition-all',
                   isActive(to)
-                    ? 'bg-blood-950/70 text-blood-400'
-                    : 'text-parchment-dim hover:bg-obsidian hover:text-parchment',
+                    ? 'border-blood-950 bg-blood-950/70 text-blood-400 shadow-realm'
+                    : 'border-transparent text-parchment-dim hover:bg-surface-hover hover:text-parchment',
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -67,10 +75,10 @@ export function AppLayout() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Link
               to={ROUTES.notifications}
-              className="relative rounded-lg p-2 text-parchment-dim transition-colors hover:bg-obsidian hover:text-parchment"
+              className="relative rounded-lg p-2 text-parchment-dim transition-colors hover:bg-surface-hover hover:text-parchment"
               aria-label={`Notifications${unreadCount ? ` (${unreadCount} unread)` : ''}`}
             >
               <Bell className="h-5 w-5" />
@@ -82,14 +90,17 @@ export function AppLayout() {
             </Link>
             <Link
               to={ROUTES.profile}
-              className="hidden items-center gap-2 rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-parchment-dim transition-colors hover:bg-obsidian hover:text-parchment sm:flex"
+              className="flex items-center gap-2 rounded-lg p-2 text-parchment-dim transition-colors hover:bg-surface-hover hover:text-parchment sm:px-3 sm:py-2"
+              aria-label="Profile"
             >
-              <User className="h-4 w-4" />
-              {user?.username ?? 'Profile'}
+              <User className="h-5 w-5" />
+              <span className="hidden text-xs font-semibold uppercase tracking-[0.12em] sm:inline">
+                {user?.username ?? 'Profile'}
+              </span>
             </Link>
             <button
               onClick={() => void logout()}
-              className="rounded-lg p-2 text-parchment-dim transition-colors hover:bg-obsidian hover:text-blood-500"
+              className="rounded-lg p-2 text-parchment-dim transition-colors hover:bg-surface-hover hover:text-blood-500"
               aria-label="Log out"
             >
               <LogOut className="h-5 w-5" />
@@ -99,7 +110,7 @@ export function AppLayout() {
       </header>
 
       {/* Page content */}
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:pb-12">
+      <main className="relative z-10 mx-auto w-full max-w-7xl flex-1 px-4 pb-28 pt-6 sm:px-6 lg:pb-12">
         <Outlet />
       </main>
 
@@ -115,7 +126,9 @@ export function AppLayout() {
               to={to}
               className={cn(
                 'flex flex-col items-center gap-1 rounded-lg px-1 py-2 text-[10px] font-semibold uppercase tracking-wider transition-colors',
-                isActive(to) ? 'text-blood-400' : 'text-parchment-dim',
+                isActive(to)
+                  ? 'bg-blood-950/70 text-blood-400 shadow-realm'
+                  : 'text-parchment-dim',
               )}
             >
               <Icon className="h-5 w-5" />

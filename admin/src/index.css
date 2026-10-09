@@ -5,15 +5,37 @@
 @layer base {
   :root {
     color-scheme: dark;
+
+    /* CHALLENGEX design tokens (shared identity with the frontend app —
+       defined independently here; the two apps never share source). */
+    --background: #070606;
+    --surface: #100909;
+    --surface-elevated: #170909;
+    --surface-hover: #210a0d;
+
+    --crimson: #e50920;
+    --crimson-dark: #760b12;
+    --crimson-glow: #ff2638;
+    --crimson-soft: rgba(229, 9, 32, 0.12);
+
+    --text-primary: #e9dfd0;
+    --text-secondary: #a79a8b;
+    --text-muted: #71665e;
+
+    --border-subtle: rgba(229, 9, 32, 0.18);
+    --border-visible: rgba(229, 9, 32, 0.4);
+
+    --shadow-red: 0 0 28px rgba(229, 9, 32, 0.09);
   }
 
   body {
     @apply bg-ink-950 text-sand font-sans antialiased;
+    background-color: var(--background);
     min-height: 100vh;
   }
 
   ::selection {
-    background: rgba(229, 22, 28, 0.4);
+    background: rgba(229, 9, 32, 0.45);
     color: #f5e7d6;
   }
 
@@ -29,11 +51,11 @@
     border-radius: 6px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #65080d;
+    background: #760b12;
   }
 
   :focus-visible {
-    outline: 2px solid #e5161c;
+    outline: 2px solid #ff2638;
     outline-offset: 1px;
   }
 }

@@ -3,6 +3,37 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { Button } from '../../src/components/ui/Button';
 import { ErrorState } from '../../src/components/common/ErrorState';
+import { RealmBackground } from '../../src/components/common/RealmBackground';
+
+describe('RealmBackground (layered artwork)', () => {
+  it('renders the artwork as a decorative, non-interactive layer', () => {
+    const { container } = render(<RealmBackground variant="app" />);
+    const root = container.firstElementChild as HTMLElement;
+
+    // Decorative contract: aria-hidden + pointer-events: none (Tailwind class,
+    // asserted via className because CSS is not loaded in unit tests).
+    expect(root).toHaveAttribute('aria-hidden');
+    expect(root.className).toContain('pointer-events-none');
+    expect(root.className).toContain('fixed');
+
+    // The supplied artwork is referenced with a valid path.
+    const img = container.querySelector('img');
+    expect(img).toHaveAttribute('src', '/assets/all-pages-background.png');
+    expect(img).toHaveAttribute('alt', '');
+  });
+
+  it('drops the artwork layer when the asset fails to load (no broken images)', () => {
+    const { container } = render(<RealmBackground variant="gate" />);
+    const img = container.querySelector('img');
+    expect(img).toHaveAttribute('src', '/assets/entry-gate.webp');
+
+    fireEvent.error(img!);
+    expect(container.querySelector('img')).toBeNull();
+
+    // The near-black foundation remains even without artwork.
+    expect(container.firstElementChild).toBeInTheDocument();
+  });
+});
 
 describe('Button', () => {
   it('renders its label', () => {

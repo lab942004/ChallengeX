@@ -9,21 +9,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: '#030303',
-        abyss: '#070707',
-        obsidian: '#101010',
+        /* Aligned to the CHALLENGEX :root design tokens (index.css). */
+        void: '#070606' /* --background */,
+        abyss: '#100909' /* --surface */,
+        obsidian: '#170909' /* --surface-elevated */,
+        surface: {
+          DEFAULT: '#100909',
+          elevated: '#170909',
+          hover: '#210a0d' /* --surface-hover */,
+        },
         blood: {
           950: '#260305',
           900: '#3d0408',
-          800: '#65080D',
-          600: '#E5161C',
-          500: '#FF2424',
-          400: '#FF6666',
+          800: '#760b12' /* --crimson-dark */,
+          600: '#e50920' /* --crimson */,
+          500: '#ff2638' /* --crimson-glow */,
+          400: '#ff5563',
         },
         parchment: {
-          DEFAULT: '#E8D5BD',
-          light: '#F5E7D6',
-          dim: '#A89588',
+          DEFAULT: '#e9dfd0' /* --text-primary */,
+          light: '#f4ead9',
+          dim: '#a79a8b' /* --text-secondary */,
+          muted: '#71665e' /* --text-muted */,
         },
       },
       fontFamily: {
@@ -33,9 +40,11 @@ const config: Config = {
         body: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        'red-glow': '0 0 24px rgba(229, 22, 28, 0.35)',
-        'red-strong': '0 0 48px rgba(229, 22, 28, 0.55)',
-        insetRune: 'inset 0 0 30px rgba(101, 8, 13, 0.5)',
+        /* --shadow-red — restrained ambient crimson shadow. */
+        realm: '0 0 28px rgba(229, 9, 32, 0.09)',
+        'red-glow': '0 0 28px rgba(229, 9, 32, 0.28)',
+        'red-strong': '0 0 48px rgba(229, 9, 32, 0.5)',
+        insetRune: 'inset 0 0 30px rgba(118, 11, 18, 0.4)',
       },
       keyframes: {
         'rune-pulse': {

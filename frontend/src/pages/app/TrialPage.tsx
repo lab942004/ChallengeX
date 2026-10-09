@@ -230,6 +230,8 @@ export function TrialPage() {
               label="Your Answer"
               placeholder="Answer honestly — the quality of your verdict depends on it…"
               value={draft}
+              maxLength={2000}
+              showCount
               onChange={(e) => onDraftChange(e.target.value)}
               className="min-h-[160px]"
             />

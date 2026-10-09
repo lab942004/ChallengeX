@@ -4,6 +4,7 @@ import { ArrowRight, Compass, Flame, Shield, Swords, Target } from 'lucide-react
 import { ROUTES } from '../../constants';
 import { useAuth } from '../../context/AuthContext';
 import { useDocumentTitle } from '../../hooks';
+import { RealmBackground } from '../../components/common/RealmBackground';
 
 const PILLARS = [
   { Icon: Swords, title: 'Trial by Fire', text: 'Your idea faces structured challenges across seven risk categories.' },
@@ -24,18 +25,14 @@ const FLOW_STEPS = [
 ];
 
 export function LandingPage() {
-  useDocumentTitle('Challenge Your Idea. Prove It. Build It.');
+  useDocumentTitle('Enter the Realm of Ideas');
   const { user } = useAuth();
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-40"
-        style={{ backgroundImage: "url('/assets/entry-gate.webp')" }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-void/70 via-void/85 to-void" aria-hidden />
-      <div className="vignette absolute inset-0" aria-hidden />
+      {/* Layered gate artwork — clear central focal point behind the hero */}
+      <RealmBackground variant="gate" artOpacity={0.85} vignette={false} />
+      <div className="vignette pointer-events-none absolute inset-0" aria-hidden />
 
       {/* Header */}
       <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-6">
@@ -71,17 +68,17 @@ export function LandingPage() {
           transition={{ duration: 0.6 }}
           className="mb-6 font-cinzel text-[11px] tracking-[0.4em] text-blood-500"
         >
-          CHALLENGE YOUR IDEA. PROVE IT. BUILD IT.
+          THE REALM OF IDEAS
         </motion.p>
 
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="title-cinzel text-4xl leading-tight text-parchment-light sm:text-6xl md:text-7xl"
+          className="title-cinzel text-4xl leading-[1.15] text-parchment-light sm:text-6xl md:text-7xl"
         >
-          SURVIVE THE
-          <span className="block text-gradient-blood">TRIALS</span>
+          CHALLENGE YOUR IDEA.
+          <span className="block text-gradient-blood">PROVE IT. BUILD IT.</span>
         </motion.h1>
 
         <motion.p
@@ -90,11 +87,8 @@ export function LandingPage() {
           transition={{ duration: 0.7, delay: 0.25 }}
           className="mt-6 max-w-2xl text-sm leading-relaxed text-parchment-dim sm:text-base"
         >
-          ChallengeX is a gamified idea-validation arena. Feed it your idea and it will
-          challenge your assumptions, expose your risks, and deliver a verdict:
-          <span className="text-parchment"> BUILD, PIVOT, VALIDATE,</span> or
-          <span className="text-blood-400"> KILL</span> — before you spend a year finding out
-          the hard way.
+          Every great idea faces a trial. Test your assumptions, uncover hidden risks, and
+          discover whether your idea is ready to become reality.
         </motion.p>
 
         <motion.div
@@ -104,11 +98,11 @@ export function LandingPage() {
           className="mt-10 flex flex-col gap-4 sm:flex-row"
         >
           <Link to={user ? ROUTES.gate : ROUTES.signup} className="btn-primary !px-8 !py-4">
-            Enter the Gate <ArrowRight className="h-4 w-4" />
+            ENTER THE REALM <ArrowRight className="h-4 w-4" />
           </Link>
-          <Link to={user ? ROUTES.dashboard : ROUTES.login} className="btn-ghost !px-8 !py-4">
-            {user ? 'Your Dashboard' : 'Log In'}
-          </Link>
+          <a href="#how-it-works" className="btn-ghost !px-8 !py-4">
+            HOW IT WORKS
+          </a>
         </motion.div>
 
         <div className="mt-6 flex items-center gap-2 font-cinzel text-[10px] tracking-[0.3em] text-parchment-dim/60">
@@ -137,10 +131,18 @@ export function LandingPage() {
         ))}
       </section>
 
-      {/* Philosophy flow */}
-      <section className="relative z-10 mx-auto max-w-5xl px-4 pb-28 text-center sm:px-6">
+      {/* How it works */}
+      <section
+        id="how-it-works"
+        className="relative z-10 mx-auto max-w-5xl scroll-mt-20 px-4 pb-28 text-center sm:px-6"
+      >
         <p className="font-cinzel text-[11px] tracking-[0.36em] text-blood-500">THE WAY OF THE REALM</p>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-3 font-cinzel text-xs tracking-[0.16em] text-parchment-dim sm:text-sm">
+        <h2 className="title-cinzel mt-3 text-2xl text-parchment-light sm:text-3xl">HOW IT WORKS</h2>
+        <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-parchment-dim">
+          Speak your idea into the unknown. The realm answers with questions across seven risk
+          categories, scores what survives, and forges a verdict you can act on.
+        </p>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-3 font-cinzel text-xs tracking-[0.16em] text-parchment-dim sm:text-sm">
           {FLOW_STEPS.map((step, i) => (
             <span key={step} className="flex items-center gap-3">
               <span className={i === FLOW_STEPS.length - 1 ? 'text-blood-400' : ''}>{step}</span>
@@ -148,7 +150,7 @@ export function LandingPage() {
             </span>
           ))}
         </div>
-        <div className="mt-12 flex justify-center gap-3 text-parchment-dim/60">
+        <div className="mt-10 flex justify-center gap-3 text-parchment-dim/60">
           <Compass className="h-5 w-5" />
         </div>
       </section>

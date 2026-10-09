@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowRight,
   FlaskConical,
   Lightbulb,
   ListChecks,
+  RotateCcw,
   Route as RouteIcon,
   ShieldAlert,
   Sparkles,
@@ -15,6 +16,7 @@ import { useDocumentTitle } from '../../hooks';
 import { PageLoader } from '../../components/ui/ThemedLoader';
 import { ErrorState } from '../../components/common/ErrorState';
 import { PageHeader } from '../../components/common/PageHeader';
+import { Button } from '../../components/ui/Button';
 import { ScoreRing } from '../../components/verdict/ScoreRing';
 import { VerdictRadar } from '../../components/verdict/VerdictRadar';
 import { trialsService } from '../../services/trials';
@@ -26,11 +28,14 @@ const PRIORITY_ORDER: Record<string, number> = { HIGH: 0, MEDIUM: 1, LOW: 2 };
 
 export function VerdictPage() {
   const { trialId = '' } = useParams();
+  const navigate = useNavigate();
   useDocumentTitle('Verdict');
 
   const [verdict, setVerdict] = useState<VerdictPayload | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<ApiClientError | null>(null);
+  const [challenging, setChallenging] = useState(false);
+  const [challengeError, setChallengeError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -55,6 +60,29 @@ export function VerdictPage() {
     };
   }, [trialId]);
 
+  /**
+   * Challenge Again — re-runs the trial on the same idea. The backend
+   * resumes an active trial or forges a fresh one for this idea.
+   */
+  const challengeAgain = async () => {
+    if (challenging) return;
+    setChallenging(true);
+    setChallengeError(null);
+    try {
+      const { trial } = await trialsService.get(trialId);
+      const { trial: fresh } = await trialsService.create({
+        ideaId: trial.ideaId,
+        mode: trial.mode,
+      });
+      navigate(`${ROUTES.trial}/${fresh.id}`);
+    } catch (err) {
+      setChallengeError(
+        err instanceof ApiClientError ? err.message : 'Could not start a new trial.',
+      );
+      setChallenging(false);
+    }
+  };
+
   if (loading) return <PageLoader message="FORGING YOUR VERDICT..." />;
   if (error) return <ErrorState kind={error.status === 404 ? '404' : 'network'} message={error.message} />;
   if (!verdict) return <ErrorState kind="500" />;
@@ -74,12 +102,26 @@ export function VerdictPage() {
             <Link to={`${ROUTES.roadmap}/${trialId}`} className="btn-primary !py-2.5 text-xs">
               <RouteIcon className="h-4 w-4" /> View Roadmap
             </Link>
+            <Button
+              variant="ghost"
+              onClick={() => void challengeAgain()}
+              loading={challenging}
+              className="!py-2.5 text-xs"
+            >
+              <RotateCcw className="h-4 w-4" /> Challenge Again
+            </Button>
             <Link to={ROUTES.history} className="btn-ghost !py-2.5 text-xs">
-              History
+              Save to History
             </Link>
           </div>
         }
       />
+
+      {challengeError && (
+        <div className="mb-4 rounded-lg border border-blood-600/50 bg-blood-950/60 px-4 py-3 text-sm text-blood-400">
+          {challengeError}
+        </div>
+      )}
 
       {/* Score + radar */}
       <div className="grid gap-6 lg:grid-cols-2">
@@ -142,7 +184,7 @@ export function VerdictPage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-2">
         <section className="card-realm p-6">
           <h2 className="title-cinzel mb-4 flex items-center gap-2 text-sm text-parchment-light">
-            <ShieldAlert className="h-4 w-4 text-blood-500" /> Risk Analysis
+            <ShieldAlert className="h-4 w-4 text-blood-500" /> Key Weaknesses
           </h2>
           <div className="space-y-3">
             {verdict.risks.length === 0 && (
@@ -224,7 +266,7 @@ export function VerdictPage() {
       {verdict.experiment && (
         <section className="card-realm mt-6 p-6">
           <h2 className="title-cinzel mb-4 flex items-center gap-2 text-sm text-parchment-light">
-            <FlaskConical className="h-4 w-4 text-blood-500" /> Validation Experiment
+            <FlaskConical className="h-4 w-4 text-blood-500" /> Cheapest Validation Experiment
           </h2>
           <div className="grid gap-6 lg:grid-cols-[1.5fr_1fr]">
             <div>

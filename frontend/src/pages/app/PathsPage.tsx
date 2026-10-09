@@ -17,14 +17,14 @@ const PATHS = [
     to: ROUTES.generate,
     Icon: Sparkles,
     title: 'GENERATE A NEW IDEA',
-    description: 'Let the realm forge 3–5 fresh idea concepts from your interests and skills.',
+    description: 'Discover fresh idea concepts based on your interests, skills, and problem areas.',
     cta: 'Generate Ideas',
   },
   {
-    to: ROUTES.dashboard,
+    to: ROUTES.roadmaps,
     Icon: Map,
     title: 'GET ROADMAP',
-    description: 'Open your dashboard to continue an existing roadmap toward launch.',
+    description: 'Continue an existing idea toward validation, development, and launch.',
     cta: 'View Roadmaps',
   },
   {

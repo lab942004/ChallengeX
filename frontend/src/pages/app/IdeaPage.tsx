@@ -5,6 +5,7 @@ import { Swords } from 'lucide-react';
 import { IDEAL_CHAR_LIMIT, ROUTES, TRIAL_MODES } from '../../constants';
 import { useDocumentTitle } from '../../hooks';
 import { PageHeader } from '../../components/common/PageHeader';
+import { Input } from '../../components/ui/Input';
 import { Textarea } from '../../components/ui/Textarea';
 import { Button } from '../../components/ui/Button';
 import { ideasService } from '../../services/ideas';
@@ -21,6 +22,7 @@ export function IdeaPage() {
   useDocumentTitle('Forge an Idea');
   const navigate = useNavigate();
   const [text, setText] = useState('');
+  const [title, setTitle] = useState('');
   const [mode, setMode] = useState<(typeof TRIAL_MODES)[number]['value']>('STRESS_TEST');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,12 +38,14 @@ export function IdeaPage() {
     setError(null);
     setLoading(true);
     try {
-      // Derive a title from the first sentence/60 chars of the idea.
-      const title = trimmed.split(/[.\n]/)[0].slice(0, 80).trim() || 'Untitled Idea';
-      const { idea } = await ideasService.create({ title, description: trimmed });
+      // Optional custom title; otherwise derive one from the first sentence.
+      const derived = trimmed.split(/[.\n]/)[0].slice(0, 80).trim() || 'Untitled Idea';
+      const finalTitle = title.trim() ? title.trim().slice(0, 120) : derived;
+      const { idea } = await ideasService.create({ title: finalTitle, description: trimmed });
       const { trial } = await trialsService.create({ ideaId: idea.id, mode });
       navigate(`${ROUTES.trial}/${trial.id}`);
     } catch (err) {
+      // Input is preserved in state so no work is lost on a failed request.
       setError(
         err instanceof ApiClientError ? err.message : 'The trial could not be forged. Try again.',
       );
@@ -53,7 +57,7 @@ export function IdeaPage() {
     <div className="mx-auto max-w-3xl">
       <PageHeader
         eyebrow="THE FIRST TRIAL"
-        title="Forge Your Idea"
+        title="Speak Your Idea into the Unknown"
         description="Describe your idea in full detail. The realm will generate challenges across seven categories and put it on trial."
       />
 
@@ -62,16 +66,27 @@ export function IdeaPage() {
         animate={{ opacity: 1, y: 0 }}
         className="card-realm p-6"
       >
-        <Textarea
-          label="Your Idea"
-          placeholder="e.g. A marketplace that connects local farms directly with restaurants, cutting out distributors…"
-          maxLength={IDEAL_CHAR_LIMIT}
-          showCount
-          value={text}
-          onChange={(e) => setText(e.target.value.slice(0, IDEAL_CHAR_LIMIT))}
-          error={error ?? undefined}
-          className="min-h-[180px]"
+        <Input
+          label="Idea Title (optional)"
+          placeholder="e.g. Farm-to-restaurant marketplace"
+          maxLength={120}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          hint="Leave blank and we will derive a title from your description."
         />
+
+        <div className="mt-4">
+          <Textarea
+            label="Your Idea"
+            placeholder="Describe the problem, your proposed solution, and the people who would benefit from it..."
+            maxLength={IDEAL_CHAR_LIMIT}
+            showCount
+            value={text}
+            onChange={(e) => setText(e.target.value.slice(0, IDEAL_CHAR_LIMIT))}
+            error={error ?? undefined}
+            className="min-h-[180px]"
+          />
+        </div>
 
         <p className="label-caps mt-6">Trial Mode</p>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -105,7 +120,7 @@ export function IdeaPage() {
             {trimmed.length} / {IDEAL_CHAR_LIMIT} characters
           </p>
           <Button onClick={() => void handleSubmit()} loading={loading} disabled={!valid}>
-            <Swords className="h-4 w-4" /> Forge Trial
+            <Swords className="h-4 w-4" /> Begin the Trial
           </Button>
         </div>
       </motion.div>

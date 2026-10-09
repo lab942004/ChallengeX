@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ROUTES } from '../../constants';
 import { useDocumentTitle, usePrefersReducedMotion } from '../../hooks';
+import { RealmBackground } from '../../components/common/RealmBackground';
 
 /** Small floating embers/particles rendered as pure CSS animations. */
 function EmberField({ count = 26 }: { count?: number }) {
@@ -23,7 +24,7 @@ function EmberField({ count = 26 }: { count?: number }) {
       {embers.map((e) => (
         <span
           key={e.id}
-          className="absolute bottom-0 rounded-full bg-blood-500 shadow-[0_0_6px_2px_rgba(229,22,28,0.6)] animate-ember-rise"
+          className="absolute bottom-0 rounded-full bg-blood-500 shadow-[0_0_6px_2px_rgba(229,9,32,0.6)] animate-ember-rise"
           style={{
             left: e.left,
             width: e.size,
@@ -52,28 +53,8 @@ export function GatePage() {
 
   return (
     <div className="relative grid min-h-screen place-items-center overflow-hidden bg-void">
-      {/* Backdrop: supplied entry-gate artwork */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/assets/entry-gate.webp')" }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 bg-void/55" aria-hidden />
-
-      {/* Drifting fog layers */}
-      {!reducedMotion && (
-        <>
-          <div
-            className="absolute inset-x-[-10%] bottom-0 h-1/3 bg-gradient-to-t from-abyss via-abyss/60 to-transparent blur-2xl animate-fog-drift opacity-70"
-            aria-hidden
-          />
-          <div
-            className="absolute inset-x-[-10%] bottom-0 h-1/4 bg-gradient-to-t from-blood-950/70 to-transparent blur-3xl animate-fog-drift opacity-50"
-            style={{ animationDelay: '6s' }}
-            aria-hidden
-          />
-        </>
-      )}
+      {/* Backdrop: layered entry-gate artwork (supplied asset) */}
+      <RealmBackground variant="gate" vignette={false} />
 
       {/* Two gate doors (left/right halves of the supplied artwork) */}
       <div className="pointer-events-none absolute inset-0 z-10" aria-hidden>
@@ -117,7 +98,7 @@ export function GatePage() {
           className="pointer-events-none absolute inset-0 z-20 opacity-30"
           style={{
             background:
-              'conic-gradient(from 200deg at 50% 0%, transparent 40%, rgba(229,22,28,0.18) 50%, transparent 60%)',
+              'conic-gradient(from 200deg at 50% 0%, transparent 40%, rgba(229,9,32,0.18) 50%, transparent 60%)',
           }}
           aria-hidden
         />
@@ -143,12 +124,12 @@ export function GatePage() {
           {opening ? 'THE SEAL BREAKS…' : 'GATE CLOSED'}
         </p>
 
-        <h1 className="title-cinzel mt-4 text-3xl text-parchment-light sm:text-5xl">
+        <h1 className="title-cinzel mt-4 text-3xl text-parchment-light [text-shadow:0_2px_18px_rgba(0,0,0,0.9)] sm:text-5xl">
           THE REALM
           <span className="block text-gradient-blood">AWAITS</span>
         </h1>
 
-        <p className="mt-4 max-w-md text-sm leading-relaxed text-parchment-dim">
+        <p className="mt-4 max-w-md text-sm leading-relaxed text-parchment-dim [text-shadow:0_1px_10px_rgba(0,0,0,0.9)]">
           Beyond these doors, your idea will be tested. Only what survives deserves to be
           built.
         </p>

@@ -1,20 +1,15 @@
 import { Link, Outlet } from 'react-router-dom';
 import { ROUTES } from '../constants';
+import { RealmBackground } from '../components/common/RealmBackground';
 
 /**
  * AuthLayout — cinematic login/signup backdrop using the supplied
- * auth-background.png and auth-box.png artwork.
+ * auth-background.png artwork via the shared RealmBackground layers.
  */
 export function AuthLayout() {
   return (
     <div className="relative min-h-screen overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: "url('/assets/auth-background.png')" }}
-        aria-hidden
-      />
-      <div className="absolute inset-0 bg-void/70 backdrop-blur-[2px]" aria-hidden />
-      <div className="vignette absolute inset-0" aria-hidden />
+      <RealmBackground variant="auth" />
 
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10">
         <Link

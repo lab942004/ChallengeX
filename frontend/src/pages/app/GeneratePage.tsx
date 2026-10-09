@@ -116,7 +116,7 @@ export function GeneratePage() {
           disabled={problemArea.trim().length < 3}
           className="w-full !py-3.5"
         >
-          <Sparkles className="h-4 w-4" /> Summon Ideas
+          <Sparkles className="h-4 w-4" /> Generate Ideas
         </Button>
       </div>
 

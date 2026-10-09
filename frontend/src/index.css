@@ -3,8 +3,32 @@
 @tailwind utilities;
 
 @layer base {
+  /*
+   * CHALLENGEX design tokens — the canonical palette used across the app.
+   * Tailwind colors in tailwind.config.ts are aligned to these same values
+   * so utility classes (including opacity modifiers) stay consistent.
+   */
   :root {
     color-scheme: dark;
+
+    --background: #070606;
+    --surface: #100909;
+    --surface-elevated: #170909;
+    --surface-hover: #210a0d;
+
+    --crimson: #e50920;
+    --crimson-dark: #760b12;
+    --crimson-glow: #ff2638;
+    --crimson-soft: rgba(229, 9, 32, 0.12);
+
+    --text-primary: #e9dfd0;
+    --text-secondary: #a79a8b;
+    --text-muted: #71665e;
+
+    --border-subtle: rgba(229, 9, 32, 0.18);
+    --border-visible: rgba(229, 9, 32, 0.4);
+
+    --shadow-red: 0 0 28px rgba(229, 9, 32, 0.09);
   }
 
   html {
@@ -13,17 +37,14 @@
 
   body {
     @apply bg-void text-parchment font-sans antialiased;
-    background-image: url('/assets/all-pages-background.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-blend-mode: soft-light;
+    /* Near-black foundation — atmospheric artwork is layered by
+       the RealmBackground component inside each layout. */
+    background-color: var(--background);
     min-height: 100vh;
   }
 
   ::selection {
-    background: rgba(229, 22, 28, 0.45);
+    background: rgba(229, 9, 32, 0.45);
     color: #f5e7d6;
   }
 
@@ -32,19 +53,19 @@
     height: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #070707;
+    background: #070606;
   }
   ::-webkit-scrollbar-thumb {
-    background: linear-gradient(#65080d, #260305);
+    background: linear-gradient(#760b12, #260305);
     border-radius: 6px;
-    border: 2px solid #070707;
+    border: 2px solid #070606;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(#e5161c, #65080d);
+    background: linear-gradient(#e50920, #760b12);
   }
 
   :focus-visible {
-    outline: 2px solid #ff2424;
+    outline: 2px solid #ff2638;
     outline-offset: 2px;
   }
 }
@@ -53,10 +74,12 @@
   /* Cinematic page shell used across app pages. */
   .realm-surface {
     @apply relative overflow-hidden bg-abyss/85 backdrop-blur-sm border border-blood-950;
+    border-color: var(--border-subtle);
   }
 
   .card-realm {
     @apply realm-surface rounded-xl shadow-insetRune;
+    box-shadow: inset 0 0 30px rgba(118, 11, 18, 0.35), var(--shadow-red);
   }
 
   .title-cinzel {

@@ -26,6 +26,9 @@ import { HistoryPage } from '../pages/app/HistoryPage';
 import { DashboardPage } from '../pages/app/DashboardPage';
 import { ProfilePage } from '../pages/app/ProfilePage';
 import { NotificationsPage } from '../pages/app/NotificationsPage';
+import { SavedIdeasPage } from '../pages/app/SavedIdeasPage';
+import { RoadmapsPage } from '../pages/app/RoadmapsPage';
+import { ExperimentsPage } from '../pages/app/ExperimentsPage';
 
 import { NotFoundPage } from '../pages/errors/NotFoundPage';
 import { ForbiddenPage } from '../pages/errors/ForbiddenPage';
@@ -80,6 +83,9 @@ export function AppRouter() {
           <Route path={ROUTES.generate} element={<GeneratePage />} />
           <Route path={`${ROUTES.roadmap}/:trialId`} element={<RoadmapPage />} />
           <Route path={ROUTES.history} element={<HistoryPage />} />
+          <Route path={ROUTES.ideas} element={<SavedIdeasPage />} />
+          <Route path={ROUTES.roadmaps} element={<RoadmapsPage />} />
+          <Route path={ROUTES.experiments} element={<ExperimentsPage />} />
           <Route path={ROUTES.dashboard} element={<DashboardPage />} />
           <Route path={ROUTES.profile} element={<ProfilePage />} />
           <Route path={ROUTES.notifications} element={<NotificationsPage />} />

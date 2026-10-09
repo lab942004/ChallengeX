@@ -103,7 +103,7 @@ export function DashboardPage() {
       />
 
       {/* Stats grid */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         <StatCard label="Total Ideas" value={stats.totalIdeas} Icon={Sparkles} />
         <StatCard label="Total Trials" value={stats.totalTrials} Icon={Swords} />
         <StatCard label="Build Decisions" value={stats.buildDecisions} Icon={Gavel} accent />
@@ -162,24 +162,48 @@ export function DashboardPage() {
         {/* Collections */}
         <section className="card-realm p-5">
           <h2 className="title-cinzel mb-4 text-sm text-parchment-light">Collections</h2>
-          <ul className="space-y-3 text-sm">
-            <li className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-parchment-dim">
-                <BookMarked className="h-4 w-4 text-blood-500" /> Saved Ideas
-              </span>
-              <span className="font-semibold text-parchment">{stats.savedIdeas.length}</span>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <Link
+                to={ROUTES.ideas}
+                className="flex items-center justify-between rounded-lg border border-transparent px-2 py-2 transition-colors hover:border-blood-950 hover:bg-surface-hover"
+              >
+                <span className="flex items-center gap-2 text-parchment-dim">
+                  <BookMarked className="h-4 w-4 text-blood-500" /> Saved Ideas
+                </span>
+                <span className="flex items-center gap-1.5 font-semibold text-parchment">
+                  {stats.savedIdeas.length}
+                  <ArrowRight className="h-3.5 w-3.5 text-blood-500" />
+                </span>
+              </Link>
             </li>
-            <li className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-parchment-dim">
-                <RouteIcon className="h-4 w-4 text-blood-500" /> Roadmaps
-              </span>
-              <span className="font-semibold text-parchment">{stats.roadmapCount}</span>
+            <li>
+              <Link
+                to={ROUTES.roadmaps}
+                className="flex items-center justify-between rounded-lg border border-transparent px-2 py-2 transition-colors hover:border-blood-950 hover:bg-surface-hover"
+              >
+                <span className="flex items-center gap-2 text-parchment-dim">
+                  <RouteIcon className="h-4 w-4 text-blood-500" /> Roadmaps
+                </span>
+                <span className="flex items-center gap-1.5 font-semibold text-parchment">
+                  {stats.roadmapCount}
+                  <ArrowRight className="h-3.5 w-3.5 text-blood-500" />
+                </span>
+              </Link>
             </li>
-            <li className="flex items-center justify-between">
-              <span className="flex items-center gap-2 text-parchment-dim">
-                <FlaskConical className="h-4 w-4 text-blood-500" /> Experiments
-              </span>
-              <span className="font-semibold text-parchment">{stats.experimentCount}</span>
+            <li>
+              <Link
+                to={ROUTES.experiments}
+                className="flex items-center justify-between rounded-lg border border-transparent px-2 py-2 transition-colors hover:border-blood-950 hover:bg-surface-hover"
+              >
+                <span className="flex items-center gap-2 text-parchment-dim">
+                  <FlaskConical className="h-4 w-4 text-blood-500" /> Experiments
+                </span>
+                <span className="flex items-center gap-1.5 font-semibold text-parchment">
+                  {stats.experimentCount}
+                  <ArrowRight className="h-3.5 w-3.5 text-blood-500" />
+                </span>
+              </Link>
             </li>
           </ul>
         </section>

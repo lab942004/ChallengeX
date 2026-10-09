@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { UserPlus } from 'lucide-react';
+import { Eye, EyeOff, UserPlus } from 'lucide-react';
 import { ROUTES } from '../../constants';
 import { useAuth } from '../../context/AuthContext';
 import { useDocumentTitle } from '../../hooks';
@@ -39,6 +39,7 @@ export function SignupPage() {
   const { register: registerUser } = useAuth();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -106,28 +107,48 @@ export function SignupPage() {
           {...register('email')}
         />
         <div className="grid gap-4 sm:grid-cols-2">
-          <Input
-            label="Password"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Min. 8 characters"
-            error={errors.password?.message}
-            {...register('password')}
-          />
-          <Input
-            label="Confirm Password"
-            type="password"
-            autoComplete="new-password"
-            placeholder="Repeat password"
-            error={errors.confirmPassword?.message}
-            {...register('confirmPassword')}
-          />
+          <div className="relative">
+            <Input
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              placeholder="Min. 8 characters"
+              error={errors.password?.message}
+              {...register('password')}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-[34px] text-parchment-dim hover:text-parchment"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
+          <div className="relative">
+            <Input
+              label="Confirm Password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="new-password"
+              placeholder="Repeat password"
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((v) => !v)}
+              className="absolute right-3 top-[34px] text-parchment-dim hover:text-parchment"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            </button>
+          </div>
         </div>
 
         <label className="flex cursor-pointer items-start gap-3 text-xs leading-relaxed text-parchment-dim">
           <input
             type="checkbox"
-            className="mt-0.5 h-4 w-4 accent-[#E5161C]"
+            className="mt-0.5 h-4 w-4 accent-[#e50920]"
             {...register('acceptTerms')}
           />
           <span>

@@ -27,7 +27,7 @@ export function VerdictRadar({ data }: VerdictRadarProps) {
     <div className="h-72 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart data={data} outerRadius="72%">
-          <PolarGrid stroke="#260305" />
+          <PolarGrid stroke="#45090f" gridType="polygon" />
           <PolarAngleAxis
             dataKey="category"
             tick={{ fill: '#A89588', fontSize: 11, fontFamily: 'Inter' }}
@@ -40,7 +40,7 @@ export function VerdictRadar({ data }: VerdictRadarProps) {
           <Tooltip
             contentStyle={{
               background: '#070707',
-              border: '1px solid #65080D',
+              border: '1px solid #760b12',
               borderRadius: 8,
               color: '#E8D5BD',
               fontSize: 12,
@@ -49,9 +49,10 @@ export function VerdictRadar({ data }: VerdictRadarProps) {
           <Radar
             name="Score"
             dataKey="score"
-            stroke="#E5161C"
-            fill="#E5161C"
-            fillOpacity={0.35}
+            stroke="#e50920"
+            fill="#e50920"
+            fillOpacity={0.3}
+            strokeWidth={2}
             isAnimationActive
           />
         </RadarChart>

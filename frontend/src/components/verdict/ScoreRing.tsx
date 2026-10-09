@@ -39,9 +39,9 @@ export function ScoreRing({ score, verdict, size = 220 }: ScoreRingProps) {
         />
         <defs>
           <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#65080D" />
-            <stop offset="60%" stopColor="#E5161C" />
-            <stop offset="100%" stopColor="#FF6666" />
+            <stop offset="0%" stopColor="#760b12" />
+            <stop offset="60%" stopColor="#e50920" />
+            <stop offset="100%" stopColor="#ff5563" />
           </linearGradient>
         </defs>
       </svg>

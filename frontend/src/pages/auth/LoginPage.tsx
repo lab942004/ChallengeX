@@ -97,7 +97,7 @@ export function LoginPage() {
           <label className="flex cursor-pointer items-center gap-2 text-parchment-dim">
             <input
               type="checkbox"
-              className="h-4 w-4 accent-[#E5161C]"
+              className="h-4 w-4 accent-[#e50920]"
               {...register('rememberMe')}
             />
             Remember me

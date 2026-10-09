@@ -100,11 +100,20 @@ function StageCard({
         </div>
       </div>
 
-      <div className="mt-4">
+      <div className="mt-4 flex flex-wrap gap-3">
         {done ? (
           <span className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-300">
             <CheckCircle2 className="h-4 w-4" /> Stage Complete
           </span>
+        ) : step.status === 'PENDING' ? (
+          <Button
+            variant="ghost"
+            className="!py-2 text-[11px]"
+            loading={busy}
+            onClick={() => onUpdate('IN_PROGRESS')}
+          >
+            <Circle className="h-3.5 w-3.5" /> Start Stage
+          </Button>
         ) : (
           <Button
             variant="ghost"
@@ -112,7 +121,7 @@ function StageCard({
             loading={busy}
             onClick={() => onUpdate('COMPLETED')}
           >
-            <Circle className="h-3.5 w-3.5" /> Mark Complete
+            <CheckCircle2 className="h-3.5 w-3.5" /> Mark Complete
           </Button>
         )}
       </div>

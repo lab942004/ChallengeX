@@ -21,10 +21,10 @@ const config: Config = {
         brand: {
           950: '#260305',
           900: '#3d0408',
-          800: '#65080D',
-          600: '#E5161C',
-          500: '#FF2424',
-          400: '#FF6666',
+          800: '#760b12' /* --crimson-dark */,
+          600: '#e50920' /* --crimson */,
+          500: '#ff2638' /* --crimson-glow */,
+          400: '#ff5563',
         },
         sand: {
           DEFAULT: '#E8D5BD',
@@ -38,7 +38,7 @@ const config: Config = {
       },
       boxShadow: {
         panel: '0 1px 0 rgba(255,255,255,0.03), 0 12px 32px rgba(0,0,0,0.45)',
-        glow: '0 0 20px rgba(229,22,28,0.25)',
+        glow: '0 0 20px rgba(229, 9, 32, 0.28)',
       },
       keyframes: {
         'fade-in': {
